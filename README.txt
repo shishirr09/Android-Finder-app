@@ -1,0 +1,1 @@
+Please  click on the atm activity. It contains a list of items with name and address and distance from current location. 

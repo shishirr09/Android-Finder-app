@@ -1,8 +1,14 @@
 package project.csulb.android.finder;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.net.Uri;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -11,60 +17,79 @@ import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
-   /* public void onClick(View v) {
-        if(v.getId() == atm.getId()){
-            startActivity(new Intent(this,Atm_activity.class));
-        }
-        else if(v.getId() == gas.getId()){
-            startActivity(new Intent(this,GasStation_activity.class));
-
-        }
-        else if(v.getId() == hospital.getId()){
-            startActivity(new Intent(this,Hospital_activity.class));
-
-        }
-        else if(v.getId() == restaurant.getId()){
-            startActivity(new Intent(this,Restaurant_activity.class));
-
-        }
-    }*/
+    private static final int MY_PERMISSION_ACCESS_FINE_LOCATION = 0;
 
     ImageButton atm,hospital,gas,restaurant;
     TextView atm_name,hospital_name,gas_name,restautant_name;
+    double latitude,longitude;
+    Get_Location locationObj;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_main);
+        if((ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION)!= PackageManager.PERMISSION_GRANTED)){
+            ActivityCompat.requestPermissions(this,
+                    new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, MY_PERMISSION_ACCESS_FINE_LOCATION);
+        }
+        //Log.i("Location", Double.toString(latitude));
+
+
         atm = (ImageButton)findViewById(R.id.atm);
         gas = (ImageButton)findViewById(R.id.gas_station);
         hospital = (ImageButton)findViewById(R.id.hospital);
         restaurant = (ImageButton)findViewById(R.id.restaurant);
 
+        getLatitude();
+        getLongitude();
+
         atm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(),Atm_activity.class));
+
+                    Log.i("Latitude",Double.toString(latitude));
+                    Log.i("Longitude",Double.toString(longitude));
+
+                    Intent intent = new Intent(getApplicationContext(),Atm_activity.class);
+                    intent.putExtra("latitude",latitude);
+                    intent.putExtra("longitude", longitude);
+
+                    startActivity(intent);
+
+
             }
         });
 
         gas.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(),GasStation_activity.class));
+                Intent intent = new Intent(getApplicationContext(),GasStation_activity.class);
+                intent.putExtra("latitude",latitude);
+                intent.putExtra("longitude",longitude);
+
+                startActivity(intent);
             }
         });
 
         hospital.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(),Hospital_activity.class));
+                Intent intent = new Intent(getApplicationContext(),Hospital_activity.class);
+                intent.putExtra("latitude",latitude);
+                intent.putExtra("longitude",longitude);
+
+                startActivity(intent);
             }
         });
 
         restaurant.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(),Restaurant_activity.class));
+                Intent intent = new Intent(getApplicationContext(),Restaurant_activity.class);
+                intent.putExtra("latitude",latitude);
+                intent.putExtra("longitude",longitude);
+
+                startActivity(intent);
             }
         });
 
@@ -86,10 +111,35 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        if (id == R.id.action_uninstall) {
+            Intent intent = new Intent(Intent.ACTION_DELETE, Uri.parse("package:project.csulb.android.finder"));
+            startActivity(intent);
+        }
+        if(id == R.id.action_searches){
+            Log.i("Recent Searches","Recent Searches" );
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void getLatitude(){
+        locationObj = new Get_Location(MainActivity.this);
+        if(locationObj.canGetLocation()) {
+            latitude =  locationObj.getLatitude();
+        }
+        else {
+            Log.i("main","showing settings");
+            locationObj.showSettings();
+        }
+    }
+    public void getLongitude(){
+        locationObj = new Get_Location(MainActivity.this);
+        if(locationObj.canGetLocation()) {
+            longitude =  locationObj.getLongitude();
+        }
+        else {
+            Log.i("main","showing settings");
+            locationObj.showSettings();
+        }
     }
 }

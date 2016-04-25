@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Title"
+        android:id="@+id/title"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:textSize="20dp"/>
+    <ImageView
+        android:id="@+id/addressimg"
+        android:layout_height="75dp"
+        android:layout_width="75dp"
+        android:src="@drawable/address"
+        android:padding="10dp"
+        android:layout_alignBottom="@+id/address"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:id="@+id/address"
+        android:text="bind Address here"
+        android:padding="5dp"
+        android:layout_below="@+id/title"
+        android:layout_marginTop="98dp"
+        android:layout_toRightOf="@+id/addressimg"
+        android:layout_toEndOf="@+id/addressimg" />
+    <ImageView
+        android:id="@+id/websiteimg"
+        android:layout_height="75dp"
+        android:layout_width="75dp"
+        android:src="@drawable/website"
+        android:padding="10dp"
+        android:layout_below="@+id/addressimg"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:id="@+id/website"
+        android:text="bind Website here"
+        android:padding="5dp"
+        android:layout_alignBottom="@+id/websiteimg"
+        android:layout_toRightOf="@+id/websiteimg"
+        android:layout_toEndOf="@+id/websiteimg" />
+    <ImageView
+        android:id="@+id/contactimg"
+        android:layout_height="75dp"
+        android:layout_width="75dp"
+        android:src="@drawable/contact"
+        android:padding="10dp"
+        android:layout_below="@+id/websiteimg"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:id="@+id/contact"
+        android:text="bind Contact details here"
+        android:padding="5dp"
+        android:layout_alignBottom="@+id/contactimg"
+        android:layout_toRightOf="@+id/contactimg"
+        android:layout_toEndOf="@+id/contactimg" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="90dp"
+        android:id="@+id/imageButton"
+        android:padding="15dp"
+        android:text="Get Direction"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        />
+
+</RelativeLayout>

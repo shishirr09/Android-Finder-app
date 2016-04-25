@@ -2,6 +2,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="project.csulb.android.finder" >
 
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/icon"
@@ -17,21 +24,46 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".Atm_activity"
-            android:label="Atm"
-            android:parentActivityName=".MainActivity"/>
+        <activity
+            android:name=".Atm_activity"
+            android:label="Atms"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme"/>
 
-        <activity android:name=".GasStation_activity"
-            android:label="Gas station"
-            android:parentActivityName=".MainActivity"/>
+        <activity
+            android:name=".GasStation_activity"
+            android:label="Gas stations"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme"/>
 
-        <activity android:name=".Hospital_activity"
-            android:label="Hospital"
-            android:parentActivityName=".MainActivity"/>
+        <activity
+            android:name=".Hospital_activity"
+            android:label="Hospitals"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme"/>
 
-        <activity android:name=".Restaurant_activity"
-            android:label="Restaurant"
-            android:parentActivityName=".MainActivity"/>
+        <activity
+            android:name=".Restaurant_activity"
+            android:label="Restaurants"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme"/>
+
+        <activity
+            android:name=".Details"
+            android:label="Details"
+            android:parentActivityName=".MainActivity" /> <!-- Make the parent activity the previous activity not the main activity-->
+
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+        <meta-data
+            android:name="com.google.android.maps.v2.API_KEY"
+            android:value="@string/google_maps_key" />
+
+        <activity
+            android:name=".MapsActivity"
+            android:label="@string/title_activity_maps" >
+        </activity>
     </application>
 
 </manifest>
