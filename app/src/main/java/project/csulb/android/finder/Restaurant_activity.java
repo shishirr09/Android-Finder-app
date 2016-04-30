@@ -1,7 +1,9 @@
 package project.csulb.android.finder;
 
 import android.app.Activity;
+import android.content.ContentValues;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
@@ -23,6 +25,7 @@ public class Restaurant_activity extends AppCompatActivity {
     ListView list;
     List<String> name, address, distance;
     Location currentLocation;
+    DatabaseHelper helper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +36,8 @@ public class Restaurant_activity extends AppCompatActivity {
 
         double latitude = intent.getExtras().getDouble("latitude");
         double longitude = intent.getExtras().getDouble("longitude");
+        //final DatabaseHelper helper = (DatabaseHelper) intent.getExtras().getSerializable("Database");
+        helper = DatabaseHelper.getInstance(getApplicationContext());
 
         currentLocation = new Location("");
         currentLocation.setLatitude(latitude);
@@ -51,8 +56,17 @@ public class Restaurant_activity extends AppCompatActivity {
 
                 intent.putExtra("current",currentLocation);
                 intent.putExtra("dest",address.get(position));
-                Log.i("dest", address.get(position));
                 intent.putExtra("title", name.get(position));
+
+                ContentValues values = new ContentValues();
+                values.put(DatabaseHelper.NAME_COLUMN, name.get(position));
+                values.put(DatabaseHelper.Address_Column, address.get(position));
+                values.put(DatabaseHelper.Type_column, "Restaurant");
+
+                SQLiteDatabase db = helper.getWritableDatabase();
+                db.insert(DatabaseHelper.Table_Name, null, values);
+
+                Log.i("dest", address.get(position));
                 Log.i("title", name.get(position));
                 startActivity(intent);
 

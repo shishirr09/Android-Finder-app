@@ -49,6 +49,12 @@
             android:theme="@style/AppTheme"/>
 
         <activity
+            android:name=".RecentSearches"
+            android:label="Recent Searches"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme"/>
+
+        <activity
             android:name=".Details"
             android:label="Details"
             android:parentActivityName=".MainActivity" /> <!-- Make the parent activity the previous activity not the main activity-->
