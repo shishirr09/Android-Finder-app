@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
@@ -17,16 +18,19 @@ import android.widget.ListView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 /**
  * Created by Shishir on 3/28/2016.
  */
 public class Hospital_activity extends AppCompatActivity {
-
     ListView list;
-    List<String> name, address, distance;
+    List<String> names, addresses, distance, contacts;
+    ArrayList<Location> locations;
+    ArrayList<Bitmap> images;
     Location currentLocation;
     DatabaseHelper helper;
+    Data data;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,17 +39,18 @@ public class Hospital_activity extends AppCompatActivity {
 
         Intent intent = getIntent();
 
-        double latitude = intent.getExtras().getDouble("latitude");
-        double longitude = intent.getExtras().getDouble("longitude");
-        //final DatabaseHelper helper = (DatabaseHelper) intent.getExtras().getSerializable("Database");
+        final double latitude = intent.getExtras().getDouble("latitude");
+        final double longitude = intent.getExtras().getDouble("longitude");
         helper = DatabaseHelper.getInstance(getApplicationContext());
 
         currentLocation = new Location("");
         currentLocation.setLatitude(latitude);
         currentLocation.setLongitude(longitude);
 
-        createData();
-        Custom_adapter adapter = new Custom_adapter(this ,name, address,distance, currentLocation);
+        createData(latitude, longitude);
+        calData();
+
+        Custom_adapter adapter = new Custom_adapter(this ,names, addresses, distance,contacts,images);
 
         list = (ListView)findViewById(R.id.list);
         list.setAdapter(adapter);
@@ -53,26 +58,26 @@ public class Hospital_activity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                Intent intent = new Intent(getApplicationContext(),Details.class);
-
-                intent.putExtra("current",currentLocation);
-                intent.putExtra("dest",address.get(position));
-                intent.putExtra("title", name.get(position));
+                Conversion obj = new Conversion(getApplicationContext());
+                Location loc = obj.getLocationFromAddress(addresses.get(position));
+                double destLat = loc.getLatitude();
+                double destLong = loc.getLongitude();
 
                 ContentValues values = new ContentValues();
-                values.put(DatabaseHelper.NAME_COLUMN, name.get(position));
-                values.put(DatabaseHelper.Address_Column, address.get(position));
+                values.put(DatabaseHelper.NAME_COLUMN, names.get(position));
+                values.put(DatabaseHelper.Address_Column, addresses.get(position));
                 values.put(DatabaseHelper.Type_column, "Hospital");
 
                 SQLiteDatabase db = helper.getWritableDatabase();
                 db.insert(DatabaseHelper.Table_Name, null, values);
 
-                Log.i("dest", address.get(position));
-                Log.i("title", name.get(position));
-                startActivity(intent);
 
-                /*Log.i("Tag","clicked");
-                Toast.makeText(Atm_activity.this,"Position "+position,Toast.LENGTH_SHORT).show();*/
+                Uri gmmIntentUri = Uri.parse("http://maps.google.com/maps?saddr=" + latitude + "," + longitude + "&daddr=" + destLat + "," + destLong + "\"");
+
+                Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                if (mapIntent.resolveActivity(getPackageManager()) != null) {
+                    startActivity(mapIntent);
+                }
             }
         });
     }
@@ -95,56 +100,26 @@ public class Hospital_activity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void createData(){
-       /* map = new HashMap<String,String>();
-        map.put("Shishir","5050 E Garford Street, Apt #68, Long Beach, 90815 ");
-        map.put("Pizza hut","4502 E Los Coyotes Diagonal, Long Beach, CA 90815 ");
-        map.put("7 eleven","5109 Pacific Coast Hwy, Long Beach, CA 90804 ");
-        map.put("In and Out","4600 Los Coyotes Diagonal, Long Beach, CA 90815 ");
-        map.put("CSULB","1250 Bellflower Blvd, Long Beach, CA 90840 ");*/
 
-        name = new ArrayList<String>();
-        address = new ArrayList<String>();
-        distance = new ArrayList<>();
+    public void createData(double lat, double lng) {
 
-        Conversion obj = new Conversion(getApplicationContext());
+        GetData obj = new GetData();
+        obj.execute(new GetURL(lat, lng).getHospitalURL());
 
-        // Check for address, some address do not return location
+        try {
+            data = obj.get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+    }
 
-        name.add("Shishir");
-        address.add("5050 E Garford Street, Apt #68, Long Beach, 90815");
-        distance.add(obj.getDistance(currentLocation, obj.getLocationFromAddress("5050 E Garford Street, Apt #68, Long Beach, 90815")));
-
-        name.add("Pizza hut");
-        address.add("4502 E Los Coyotes Diagonal, Long Beach, CA 90815");
-        distance.add(obj.getDistance(currentLocation, obj.getLocationFromAddress("4502 E Los Coyotes Diagonal, Long Beach, CA 90815")));
-
-
-        name.add("7 eleven");
-        address.add("5109 Pacific Coast Hwy, Long Beach, CA 90804");
-        distance.add(obj.getDistance(currentLocation, obj.getLocationFromAddress("5109 Pacific Coast Hwy, Long Beach, CA 90804")));
-
-        name.add("Edwards cinema");
-        address.add("7501 E Carson St, Lakewood, CA 90808");
-        distance.add(obj.getDistance(currentLocation, obj.getLocationFromAddress("7501 E Carson St, Lakewood, CA 90808")));
-
-        name.add("CSULB");
-        address.add("1250 Bellflower Blvd, Long Beach, CA 90840 ");
-        distance.add(obj.getDistance(currentLocation, obj.getLocationFromAddress("1250 Bellflower Blvd, Long Beach, CA 90840")));
-
-        name.add("Pizza hut");
-        address.add("4502 E Los Coyotes Diagonal, Long Beach, CA 90815");
-        distance.add(obj.getDistance(currentLocation,obj.getLocationFromAddress("4502 E Los Coyotes Diagonal, Long Beach, CA 90815")));
-
-        name.add("Pizza hut");
-        address.add("4502 E Los Coyotes Diagonal, Long Beach, CA 90815");
-        distance.add(obj.getDistance(currentLocation,obj.getLocationFromAddress("4502 E Los Coyotes Diagonal, Long Beach, CA 90815")));
-
-        name.add("Pizza hut");
-        address.add("4502 E Los Coyotes Diagonal, Long Beach, CA 90815");
-        distance.add(obj.getDistance(currentLocation,obj.getLocationFromAddress("4502 E Los Coyotes Diagonal, Long Beach, CA 90815")));
-
-
-
+    public void calData(){
+        names = data.getNames();
+        contacts = data.getContacts();
+        images = data.getImages();
+        addresses = data.getAddress(new Conversion(getApplicationContext()));
+        distance = data.getDistance(new Conversion(getApplicationContext()), currentLocation);
     }
 }

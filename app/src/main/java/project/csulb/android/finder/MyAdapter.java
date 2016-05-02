@@ -17,7 +17,7 @@ public class MyAdapter extends ArrayAdapter {
     List<String> names,addresses,type;
 
     public MyAdapter(Context context,List<String> name,List<String> address,List<String> type) {
-        super(context,R.layout.custom_adapter_layout,name);
+        super(context,R.layout.my_adapter_layout,name);
         this.names = name;
         this.addresses = address;
         this.type = type;
@@ -27,7 +27,7 @@ public class MyAdapter extends ArrayAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = LayoutInflater.from(getContext());
-        View view = inflater.inflate(R.layout.custom_adapter_layout,parent,false);
+        View view = inflater.inflate(R.layout.my_adapter_layout,parent,false);
 
 
         TextView name = (TextView)view.findViewById(R.id.name);

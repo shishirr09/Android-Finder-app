@@ -22,12 +22,16 @@ public class Conversion {
 
     public String getAddressFromLocation(Location location){
         List<Address> list = null;
-
+        String address = "";
         Geocoder gc = new Geocoder(context, Locale.getDefault());
         try{
             list = gc.getFromLocation(location.getLatitude(), location.getLongitude(), 5);
         }catch (IOException e){}
-        return list.get(0).toString();
+
+        if (list.get(0) != null){
+            address = list.get(0).getAddressLine(0) +", "+ list.get(0).getAddressLine(1) + ", "+ list.get(0).getAddressLine(2);
+        }
+        return address;
     }
 
     public Location getLocationFromAddress(String address){
@@ -41,13 +45,12 @@ public class Conversion {
 
             ad = list.get(0);
 
-
         Log.i("In getLocationFromAdd",ad.toString());
-        double latitude = ad.getLatitude();
-        double longitude = ad.getLongitude();
+
         Location location = new Location("");
-        location.setLatitude(latitude);
-        location.setLongitude(longitude);
+        location.setLatitude(ad.getLatitude());
+        location.setLongitude(ad.getLongitude());
+
         return location;
     }
 

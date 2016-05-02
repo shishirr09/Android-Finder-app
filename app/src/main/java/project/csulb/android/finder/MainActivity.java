@@ -125,7 +125,7 @@ public class MainActivity extends AppCompatActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_uninstall) {
             SQLiteDatabase db = helper.getWritableDatabase();
-            String sql = "DELETE * FROM "+DatabaseHelper.Table_Name+" ;";
+            String sql = "DELETE FROM "+DatabaseHelper.Table_Name+" ;";
             db.rawQuery(sql,null);
             Intent intent = new Intent(Intent.ACTION_DELETE, Uri.parse("package:project.csulb.android.finder"));
             startActivity(intent);
@@ -134,7 +134,6 @@ public class MainActivity extends AppCompatActivity {
             Log.i("Recent Searches", "Recent Searches");
 
             Intent intent = new Intent(MainActivity.this, RecentSearches.class);
-            //intent.putExtra("Database",helper);
             intent.putExtra("latitude",latitude);
             intent.putExtra("longitude",longitude);
 

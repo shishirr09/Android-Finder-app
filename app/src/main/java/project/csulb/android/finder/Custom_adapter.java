@@ -1,6 +1,7 @@
 package project.csulb.android.finder;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -8,9 +9,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -19,14 +22,15 @@ import java.util.Locale;
  * Created by Shishir on 3/28/2016.
  */
 public class Custom_adapter extends ArrayAdapter {
-    Location currentLocation;
-    List<String> names,addresses,dist,type;
-    public Custom_adapter(Context context,List<String> name,List<String> address,List<String> distance,  Location currentLocation) {
+    List<String> names,addresses,dist,contacts;
+    ArrayList<Bitmap> images;
+    public Custom_adapter(Context context,List<String> name,List<String> address,List<String> distance,List<String> contacts,ArrayList<Bitmap> images) {
         super(context,R.layout.custom_adapter_layout,name);
         this.names = name;
         this.addresses = address;
-        this.currentLocation = currentLocation;
         this.dist = distance;
+        this.contacts = contacts;
+        this.images = images;
         System.out.println("In custom adapter 1");
     }
 
@@ -51,18 +55,19 @@ public class Custom_adapter extends ArrayAdapter {
         String distanceTo = dist.get(position);
         distance.setText(distanceTo);
 
+        ImageView img = (ImageView)view.findViewById(R.id.image);
+        img.setImageBitmap(images.get(position));
+
+        TextView contact = (TextView)view.findViewById(R.id.contact);
+        if(contacts.get(position) == null){
+            contact.setText("No contact available");
+        }
+        else {
+            contact.setText("Contact : "+contacts.get(position));
+        }
+
 
         return view;
     }
 
-    @Override
-    public boolean areAllItemsEnabled() {
-        return  true;
-    }
-
-    @Override
-    public boolean isEnabled(int position) {
-        //return super.isEnabled(position);
-        return true;
-    }
 }

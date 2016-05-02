@@ -1,10 +1,15 @@
 package project.csulb.android.finder;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.io.FileNotFoundException;
+import java.net.URL;
 
 
 /**
@@ -35,8 +40,8 @@ public class GetData extends AsyncTask<String,Void,Data> {
                 for (int i = 0; i < 10; i++) {
                     addName(i, arr);
                     addLocation(i,arr);
-                    addContact(i,arr);
-                    addIcon(i,arr);
+                    addContacts(i,arr);
+                    addImage(i, arr);
 
                 }
             } catch (Exception e) {
@@ -72,11 +77,57 @@ public class GetData extends AsyncTask<String,Void,Data> {
 
     }
 
-    private void addContact(int i, JSONArray arr){
+    private void addContacts(int i, JSONArray arr){
+        String contact;
+        try{
+            if(arr.getJSONObject(i).getJSONObject("contact").has("phone")){
+                contact = arr.getJSONObject(i).getJSONObject("contact").getString("phone");
+            }
+            else {
+                contact = null;
+            }
 
+            data.addContacts(contact);
+        }catch (Exception e){e.printStackTrace();}
     }
 
-    private void addIcon(int i, JSONArray arr){
-        
+    private void addImage(int i, JSONArray arr){
+        String imageURL = null;
+        String defaultURL = "https://foursquare.com/img/categories/food/default_88.png";
+        Bitmap bmp;
+
+        try{
+            JSONArray array = arr.getJSONObject(i).getJSONArray("categories");
+
+            if(array.length() > 0){
+                System.out.println(i +": "+ array.length());
+                JSONObject object = array.getJSONObject(0);
+                if(object.has("icon")){
+                    if(object.getJSONObject("icon").has("prefix") && object.getJSONObject("icon").has("suffix")){
+                        imageURL = object.getJSONObject("icon").getString("prefix")+ "bg_88" + object.getJSONObject("icon").getString("suffix");
+                    }
+                }
+            }
+
+            if(imageURL != null){
+                URL url;
+                try{
+                    url = new URL(imageURL);
+                    bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+
+                }catch (FileNotFoundException e){
+                    url = new URL(defaultURL);
+                    bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                    e.printStackTrace();
+                }
+
+            }
+            else{
+                URL url = new URL(defaultURL);
+                bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+            }
+
+            data.addImage(bmp);
+        }catch (Exception e){e.printStackTrace();}
     }
 }
