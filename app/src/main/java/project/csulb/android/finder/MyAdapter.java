@@ -14,14 +14,13 @@ import java.util.List;
  * Created by Shishir on 4/25/2016.
  */
 public class MyAdapter extends ArrayAdapter {
-    List<String> names,addresses,type;
+    private List<String> names,addresses,type;
 
     public MyAdapter(Context context,List<String> name,List<String> address,List<String> type) {
         super(context,R.layout.my_adapter_layout,name);
         this.names = name;
         this.addresses = address;
         this.type = type;
-        System.out.println("In My adapter");
     }
 
     @Override
@@ -40,7 +39,6 @@ public class MyAdapter extends ArrayAdapter {
         TextView distance = (TextView)view.findViewById(R.id.distance);
         String typeOfItem = type.get(position);
         distance.setText(typeOfItem);
-
 
         return view;
     }

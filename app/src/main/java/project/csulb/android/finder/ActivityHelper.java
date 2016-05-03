@@ -12,8 +12,8 @@ import java.util.ArrayList;
  * Created by Shishir on 5/2/2016.
  */
 public class ActivityHelper {
-    Intent intent;
-    double lat, lng;
+    private Intent intent;
+    private double lat, lng;
     public ActivityHelper(Intent intent){
         this.intent = intent;
     }
@@ -31,10 +31,8 @@ public class ActivityHelper {
         Location loc = new Location("");
         loc.setLatitude(lat);
         loc.setLongitude(lng);
-        System.out.print(loc.toString());
         return loc;
     }
-
 
     public Location getDestinationLocation(ArrayList<String> address, int position, Context context){
         return new Conversion(context).getLocationFromAddress(address.get(position));
@@ -49,4 +47,5 @@ public class ActivityHelper {
         SQLiteDatabase db = helper.getWritableDatabase();
         db.insert(DatabaseHelper.Table_Name, null, values);
     }
+
 }

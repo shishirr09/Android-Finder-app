@@ -5,22 +5,14 @@ import android.app.Service;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.location.Address;
-import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.location.LocationProvider;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.util.Log;
-
-import java.io.IOException;
-import java.security.Provider;
-import java.util.List;
-import java.util.Locale;
 
 /**
  * Created by Shishir on 4/7/2016.
@@ -30,7 +22,6 @@ public class Get_Location  extends Service implements LocationListener{
     private Location location;
     private double latitude, longitude;
     private LocationManager manager ;
-    private LocationProvider provider;
     private boolean canGetLocation = false;
     private boolean isGPSEnabled = false, isNetworkEnabled = false;
     private long Min_Time_Between_Updates = 1000*60*1;
@@ -113,7 +104,6 @@ public class Get_Location  extends Service implements LocationListener{
                             if(location!=null){
                                 latitude = location.getLatitude();
                                 longitude = location.getLongitude();
-                                //System.out.println(latitude + "  " + longitude);
                             }
                         }
 

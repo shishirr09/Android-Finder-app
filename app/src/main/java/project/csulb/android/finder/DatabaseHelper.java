@@ -3,9 +3,6 @@ package project.csulb.android.finder;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.os.Parcelable;
-
-import java.io.Serializable;
 
 /**
  * Created by Shishir on 4/25/2016.

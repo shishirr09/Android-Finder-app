@@ -1,39 +1,30 @@
 package project.csulb.android.finder;
 
-import android.app.Activity;
-import android.content.ContentValues;
+
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
-
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 /**
  * Created by Shishir on 3/28/2016.
  */
 public class Atm_activity extends AppCompatActivity {
-    ListView list;
-    ArrayList<String> names, addresses, distance,contacts;
-    ArrayList<Bitmap> images;
-    Location currentLocation;
-    DatabaseHelper helper;
-    Data data;
+    private ListView list;
+    private ArrayList<String> names, addresses, distance,contacts;
+    private ArrayList<Bitmap> images;
+    private Location currentLocation;
+    private DatabaseHelper helper;
+    private Data data;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +50,7 @@ public class Atm_activity extends AppCompatActivity {
 
                 Location destLoc = activityHelper.getDestinationLocation(addresses, position, getApplicationContext());
 
-                String type = "ATM"; // change this
+                String type = "ATM";
                 activityHelper.insertData(names,addresses,type,position,helper);
 
                 Uri gmmIntentUri = Uri.parse("http://maps.google.com/maps?saddr=" + activityHelper.getLatitude() + "," + activityHelper.getLongitude() + "&daddr=" + destLoc.getLatitude() + "," + destLoc.getLongitude() + "\"");
@@ -102,10 +93,10 @@ public class Atm_activity extends AppCompatActivity {
     }
 
 
-    public void createData(double lat, double lng) {
+    private void createData(double lat, double lng) {
 
         GetData obj = new GetData();
-        obj.execute(new GetURL(lat, lng).getATMURL()); // change here
+        obj.execute(new GetURL(lat, lng).getATMURL());
 
         try {
             data = obj.get();
@@ -116,7 +107,7 @@ public class Atm_activity extends AppCompatActivity {
         }
     }
 
-    public void calData(){
+    private void calData(){
         names = data.getNames();
         contacts = data.getContacts();
         images = data.getImages();

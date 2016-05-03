@@ -4,8 +4,6 @@ import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
-import android.util.Log;
-
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
@@ -43,14 +41,14 @@ public class Conversion {
             list = gc.getFromLocationName(address, 5);
         }catch (IOException e){}
 
-            ad = list.get(0);
-
-        Log.i("In getLocationFromAdd",ad.toString());
+        if(list.isEmpty()){
+            return new Location("");
+        }
+        ad = list.get(0);
 
         Location location = new Location("");
         location.setLatitude(ad.getLatitude());
         location.setLongitude(ad.getLongitude());
-
         return location;
     }
 
@@ -68,10 +66,7 @@ public class Conversion {
 
         // Rounding distance to two decimal places
         dist = Math.floor(dist*100)/100;
-        Log.i("Distance",Double.toString(dist));
-
         return (Double.toString(dist) + " m");
-
     }
 
     private static double deg2rad(double deg) {

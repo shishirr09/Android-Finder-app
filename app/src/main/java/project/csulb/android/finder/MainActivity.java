@@ -3,7 +3,6 @@ package project.csulb.android.finder;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.sqlite.SQLiteDatabase;
-import android.location.Location;
 import android.net.Uri;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -14,18 +13,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
-import android.widget.TextView;
-
-import java.io.Serializable;
 
 public class MainActivity extends AppCompatActivity {
 
     private static final int MY_PERMISSION_ACCESS_FINE_LOCATION = 0;
 
-    ImageButton atm,hospital,gas,restaurant,motels,seveneleven,starbucks,nightclub,pharmacy;
-    double latitude,longitude;
-    Get_Location locationObj;
-    DatabaseHelper helper;
+    private ImageButton atm,hospital,gas,restaurant,motels,seveneleven,starbucks,nightclub,pharmacy;
+    private double latitude,longitude;
+    private Get_Location locationObj;
+    private DatabaseHelper helper;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -175,16 +171,12 @@ public class MainActivity extends AppCompatActivity {
         }
         if(id == R.id.action_searches){
             Log.i("Recent Searches", "Recent Searches");
-
             Intent intent = new Intent(MainActivity.this, RecentSearches.class);
             intent.putExtra("latitude",latitude);
             intent.putExtra("longitude",longitude);
-
-
             startActivity(intent);
 
         }
-
         return super.onOptionsItemSelected(item);
     }
 

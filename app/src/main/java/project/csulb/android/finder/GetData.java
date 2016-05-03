@@ -3,11 +3,9 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.util.Log;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.FileNotFoundException;
 import java.net.URL;
 
@@ -16,9 +14,7 @@ import java.net.URL;
  * Created by Shishir on 4/29/2016.
  */
 public class GetData extends AsyncTask<String,Void,Data> {
-
     private Data data;
-
     public GetData() {
         data = new Data();
     }

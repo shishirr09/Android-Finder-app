@@ -2,10 +2,6 @@ package project.csulb.android.finder;
 
 import android.graphics.Bitmap;
 import android.location.Location;
-import android.os.Parcel;
-import android.os.Parcelable;
-
-import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
@@ -46,10 +42,6 @@ public class Data {
 
     public ArrayList<String> getNames(){
         return names;
-    }
-
-    public ArrayList<Location> getLocations(){
-        return locations;
     }
 
     public ArrayList<String> getContacts(){

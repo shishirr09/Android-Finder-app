@@ -7,7 +7,6 @@ import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
@@ -20,12 +19,12 @@ import java.util.List;
  * Created by Shishir on 4/25/2016.
  */
 public class RecentSearches extends AppCompatActivity {
-    List<String> names ;
-    List<String> addresses ;
-    List<String> type ;
-    Location currentLocation;
-    ListView view;
-    DatabaseHelper helper;
+    private List<String> names ;
+    private List<String> addresses ;
+    private List<String> type ;
+    private Location currentLocation;
+    private ListView view;
+    private DatabaseHelper helper;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
