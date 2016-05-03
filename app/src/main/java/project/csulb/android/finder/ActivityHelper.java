@@ -13,21 +13,25 @@ import java.util.ArrayList;
  */
 public class ActivityHelper {
     Intent intent;
+    double lat, lng;
     public ActivityHelper(Intent intent){
         this.intent = intent;
     }
 
     public double getLatitude(){
-       return intent.getExtras().getDouble("latitude");
+        lat = intent.getExtras().getDouble("latitude");
+        return lat;
     }
     public double getLongitude(){
-        return intent.getExtras().getDouble("longitude");
+        lng = intent.getExtras().getDouble("longitude");
+        return lng;
     }
 
-    public Location getCurrentLocation(){
+    public Location getCurrentLocation(double lat, double lng){
         Location loc = new Location("");
-        loc.setLatitude(getLatitude());
-        loc.setLongitude(getLongitude());
+        loc.setLatitude(lat);
+        loc.setLongitude(lng);
+        System.out.print(loc.toString());
         return loc;
     }
 

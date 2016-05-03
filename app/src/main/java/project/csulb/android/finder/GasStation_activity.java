@@ -40,7 +40,7 @@ public class GasStation_activity extends AppCompatActivity {
         Intent intent = getIntent();
         final ActivityHelper activityHelper = new ActivityHelper(intent);
         helper = DatabaseHelper.getInstance(getApplicationContext());
-        currentLocation = activityHelper.getCurrentLocation();
+        currentLocation = activityHelper.getCurrentLocation(activityHelper.getLatitude(),activityHelper.getLongitude());
 
 
         createData(activityHelper.getLatitude(), activityHelper.getLongitude());
