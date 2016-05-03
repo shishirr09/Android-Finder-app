@@ -22,8 +22,7 @@ public class MainActivity extends AppCompatActivity {
 
     private static final int MY_PERMISSION_ACCESS_FINE_LOCATION = 0;
 
-    ImageButton atm,hospital,gas,restaurant;
-    TextView atm_name,hospital_name,gas_name,restautant_name;
+    ImageButton atm,hospital,gas,restaurant,motels,seveneleven,starbucks,nightclub,pharmacy;
     double latitude,longitude;
     Get_Location locationObj;
     DatabaseHelper helper;
@@ -37,13 +36,17 @@ public class MainActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this,
                     new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, MY_PERMISSION_ACCESS_FINE_LOCATION);
         }
-        //Log.i("Location", Double.toString(latitude));
-
 
         atm = (ImageButton)findViewById(R.id.atm);
         gas = (ImageButton)findViewById(R.id.gas_station);
         hospital = (ImageButton)findViewById(R.id.hospital);
         restaurant = (ImageButton)findViewById(R.id.restaurant);
+        motels = (ImageButton)findViewById(R.id.motel);
+        seveneleven = (ImageButton)findViewById(R.id.SevenEleven);
+        starbucks = (ImageButton)findViewById(R.id.starbucks);
+        nightclub = (ImageButton)findViewById(R.id.nightclub);
+        pharmacy = (ImageButton)findViewById(R.id.pharmacy);
+
 
         setLatitude();
         setLongitude();
@@ -51,16 +54,10 @@ public class MainActivity extends AppCompatActivity {
         atm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
-                Intent intent = new Intent(getApplicationContext(),Atm_activity.class);
-                intent.putExtra("latitude",latitude);
+                Intent intent = new Intent(getApplicationContext(), Atm_activity.class);
+                intent.putExtra("latitude", latitude);
                 intent.putExtra("longitude", longitude);
-                // intent.putExtra("Database", helper);
-
                 startActivity(intent);
-
-
             }
         });
 
@@ -70,7 +67,6 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(),GasStation_activity.class);
                 intent.putExtra("latitude",latitude);
                 intent.putExtra("longitude",longitude);
-                //intent.putExtra("Database", helper);
                 startActivity(intent);
             }
         });
@@ -81,7 +77,6 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(),Hospital_activity.class);
                 intent.putExtra("latitude",latitude);
                 intent.putExtra("longitude",longitude);
-                //intent.putExtra("Database", helper);
                 startActivity(intent);
             }
         });
@@ -92,11 +87,59 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(),Restaurant_activity.class);
                 intent.putExtra("latitude",latitude);
                 intent.putExtra("longitude",longitude);
-                //intent.putExtra("Database", helper);
                 startActivity(intent);
             }
         });
 
+        motels.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(),Motel_activity.class);
+                intent.putExtra("latitude",latitude);
+                intent.putExtra("longitude",longitude);
+                startActivity(intent);
+            }
+        });
+
+        seveneleven.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(),SevenEleven_activity.class);
+                intent.putExtra("latitude",latitude);
+                intent.putExtra("longitude",longitude);
+                startActivity(intent);
+            }
+        });
+
+        starbucks.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), Starbucks_activity.class);
+                intent.putExtra("latitude", latitude);
+                intent.putExtra("longitude", longitude);
+                startActivity(intent);
+            }
+        });
+
+        nightclub.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(),NightClub_activity.class);
+                intent.putExtra("latitude",latitude);
+                intent.putExtra("longitude",longitude);
+                startActivity(intent);
+            }
+        });
+
+        pharmacy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(),Pharmacy_activity.class);
+                intent.putExtra("latitude",latitude);
+                intent.putExtra("longitude",longitude);
+                startActivity(intent);
+            }
+        });
 
     }
 

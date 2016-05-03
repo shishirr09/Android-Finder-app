@@ -1,6 +1,5 @@
 package project.csulb.android.finder;
 
-import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
@@ -9,7 +8,6 @@ import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,12 +19,11 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 /**
- * Created by Shishir on 3/28/2016.
+ * Created by Shishir on 5/2/2016.
  */
-public class Restaurant_activity extends AppCompatActivity {
+public class Pharmacy_activity extends AppCompatActivity {
     ListView list;
-    ArrayList<String> names, addresses, distance, contacts;
-    ArrayList<Location> locations;
+    ArrayList<String> names, addresses, distance,contacts;
     ArrayList<Bitmap> images;
     Location currentLocation;
     DatabaseHelper helper;
@@ -56,7 +53,7 @@ public class Restaurant_activity extends AppCompatActivity {
 
                 Location destLoc = activityHelper.getDestinationLocation(addresses, position, getApplicationContext());
 
-                String type = "Restaurant"; // change this
+                String type = "Pharmacy"; // change this
                 activityHelper.insertData(names, addresses, type, position, helper);
 
                 Uri gmmIntentUri = Uri.parse("http://maps.google.com/maps?saddr=" + activityHelper.getLatitude() + "," + activityHelper.getLongitude() + "&daddr=" + destLoc.getLatitude() + "," + destLoc.getLongitude() + "\"");
@@ -73,16 +70,15 @@ public class Restaurant_activity extends AppCompatActivity {
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
 
                 Intent callIntent = new Intent(Intent.ACTION_DIAL);
-                callIntent.setData(Uri.parse("tel:" + contacts.get(position)));
+                callIntent.setData(Uri.parse("tel:"+contacts.get(position)));
                 startActivity(callIntent);
                 return true;
             }
         });
     }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.atm_menu, menu);
+        getMenuInflater().inflate(R.menu.pharmacy_menu, menu);
         return true;
     }
 
@@ -102,7 +98,7 @@ public class Restaurant_activity extends AppCompatActivity {
     public void createData(double lat, double lng) {
 
         GetData obj = new GetData();
-        obj.execute(new GetURL(lat, lng).getRestaurantURL());
+        obj.execute(new GetURL(lat, lng).getPharmacy()); // change here
 
         try {
             data = obj.get();

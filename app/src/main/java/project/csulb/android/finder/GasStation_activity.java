@@ -25,7 +25,7 @@ import java.util.concurrent.ExecutionException;
  */
 public class GasStation_activity extends AppCompatActivity {
     ListView list;
-    List<String> names, addresses, distance, contacts;
+    ArrayList<String> names, addresses, distance, contacts;
     ArrayList<Location> locations;
     ArrayList<Bitmap> images;
     Location currentLocation;
@@ -38,44 +38,44 @@ public class GasStation_activity extends AppCompatActivity {
         setContentView(R.layout.view_layout);
 
         Intent intent = getIntent();
-
-        final double latitude = intent.getExtras().getDouble("latitude");
-        final double longitude = intent.getExtras().getDouble("longitude");
+        final ActivityHelper activityHelper = new ActivityHelper(intent);
         helper = DatabaseHelper.getInstance(getApplicationContext());
+        currentLocation = activityHelper.getCurrentLocation();
 
-        currentLocation = new Location("");
-        currentLocation.setLatitude(latitude);
-        currentLocation.setLongitude(longitude);
 
-        createData(latitude, longitude);
+        createData(activityHelper.getLatitude(), activityHelper.getLongitude());
         calData();
 
-        Custom_adapter adapter = new Custom_adapter(this, names, addresses, distance, contacts, images);
+        Custom_adapter adapter = new Custom_adapter(this ,names, addresses, distance,contacts,images);
 
-        list = (ListView) findViewById(R.id.list);
+        list = (ListView)findViewById(R.id.list);
         list.setAdapter(adapter);
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Conversion obj = new Conversion(getApplicationContext());
-                Location loc = obj.getLocationFromAddress(addresses.get(position));
-                double destLat = loc.getLatitude();
-                double destLong = loc.getLongitude();
 
-                ContentValues values = new ContentValues();
-                values.put(DatabaseHelper.NAME_COLUMN, names.get(position));
-                values.put(DatabaseHelper.Address_Column, addresses.get(position));
-                values.put(DatabaseHelper.Type_column, "Restaurant");
+                Location destLoc = activityHelper.getDestinationLocation(addresses, position, getApplicationContext());
 
-                SQLiteDatabase db = helper.getWritableDatabase();
-                db.insert(DatabaseHelper.Table_Name, null, values);
+                String type = "Gas Station"; // change this
+                activityHelper.insertData(names, addresses, type, position, helper);
 
-                Uri gmmIntentUri = Uri.parse("http://maps.google.com/maps?saddr=" + latitude + "," + longitude + "&daddr=" + destLat + "," + destLong + "\"");
+                Uri gmmIntentUri = Uri.parse("http://maps.google.com/maps?saddr=" + activityHelper.getLatitude() + "," + activityHelper.getLongitude() + "&daddr=" + destLoc.getLatitude() + "," + destLoc.getLongitude() + "\"");
 
                 Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
                 if (mapIntent.resolveActivity(getPackageManager()) != null) {
                     startActivity(mapIntent);
                 }
+            }
+        });
+
+        list.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+
+                Intent callIntent = new Intent(Intent.ACTION_DIAL);
+                callIntent.setData(Uri.parse("tel:" + contacts.get(position)));
+                startActivity(callIntent);
+                return true;
             }
         });
     }

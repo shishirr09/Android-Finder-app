@@ -29,7 +29,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
 
     public static synchronized DatabaseHelper getInstance(Context context){
         if(helper == null){
-            return new DatabaseHelper(context.getApplicationContext());
+            helper =  new DatabaseHelper(context.getApplicationContext());
         }
         return helper;
     }

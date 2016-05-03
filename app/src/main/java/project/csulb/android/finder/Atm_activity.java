@@ -29,7 +29,7 @@ import java.util.concurrent.ExecutionException;
  */
 public class Atm_activity extends AppCompatActivity {
     ListView list;
-    List<String> names, addresses, distance,contacts;
+    ArrayList<String> names, addresses, distance,contacts;
     ArrayList<Bitmap> images;
     Location currentLocation;
     DatabaseHelper helper;
@@ -41,17 +41,12 @@ public class Atm_activity extends AppCompatActivity {
         setContentView(R.layout.view_layout);
 
         Intent intent = getIntent();
-
-        final double latitude = intent.getExtras().getDouble("latitude");
-        final double longitude = intent.getExtras().getDouble("longitude");
+        final ActivityHelper activityHelper = new ActivityHelper(intent);
         helper = DatabaseHelper.getInstance(getApplicationContext());
-
-        currentLocation = new Location("");
-        currentLocation.setLatitude(latitude);
-        currentLocation.setLongitude(longitude);
+        currentLocation = activityHelper.getCurrentLocation();
 
 
-        createData(latitude, longitude);
+        createData(activityHelper.getLatitude(), activityHelper.getLongitude());
         calData();
 
         Custom_adapter adapter = new Custom_adapter(this ,names, addresses, distance,contacts,images);
@@ -62,20 +57,12 @@ public class Atm_activity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                Conversion obj = new Conversion(getApplicationContext());
-                Location loc = obj.getLocationFromAddress(addresses.get(position));
-                double destLat = loc.getLatitude();
-                double destLong = loc.getLongitude();
+                Location destLoc = activityHelper.getDestinationLocation(addresses, position, getApplicationContext());
 
-                ContentValues values = new ContentValues();
-                values.put(DatabaseHelper.NAME_COLUMN, names.get(position));
-                values.put(DatabaseHelper.Address_Column, addresses.get(position));
-                values.put(DatabaseHelper.Type_column, "Atm");
+                String type = "ATM"; // change this
+                activityHelper.insertData(names,addresses,type,position,helper);
 
-                SQLiteDatabase db = helper.getWritableDatabase();
-                db.insert(DatabaseHelper.Table_Name, null, values);
-
-                Uri gmmIntentUri = Uri.parse("http://maps.google.com/maps?saddr=" + latitude + "," + longitude + "&daddr=" + destLat + "," + destLong + "\"");
+                Uri gmmIntentUri = Uri.parse("http://maps.google.com/maps?saddr=" + activityHelper.getLatitude() + "," + activityHelper.getLongitude() + "&daddr=" + destLoc.getLatitude() + "," + destLoc.getLongitude() + "\"");
 
                 Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
                 if (mapIntent.resolveActivity(getPackageManager()) != null) {
@@ -87,7 +74,11 @@ public class Atm_activity extends AppCompatActivity {
         list.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                return false;
+
+                Intent callIntent = new Intent(Intent.ACTION_DIAL);
+                callIntent.setData(Uri.parse("tel:"+contacts.get(position)));
+                startActivity(callIntent);
+                return true;
             }
         });
     }
@@ -114,7 +105,7 @@ public class Atm_activity extends AppCompatActivity {
     public void createData(double lat, double lng) {
 
         GetData obj = new GetData();
-        obj.execute(new GetURL(lat, lng).getATMURL());
+        obj.execute(new GetURL(lat, lng).getATMURL()); // change here
 
         try {
             data = obj.get();

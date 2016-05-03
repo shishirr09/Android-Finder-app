@@ -55,9 +55,35 @@
             android:theme="@style/AppTheme"/>
 
         <activity
-            android:name=".Details"
-            android:label="Details"
-            android:parentActivityName=".MainActivity" /> <!-- Make the parent activity the previous activity not the main activity-->
+            android:name=".NightClub_activity"
+            android:label="Night Clubs"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme"/>
+
+        <activity
+            android:name=".Starbucks_activity"
+            android:label="Starbucks"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme"/>
+
+        <activity
+            android:name=".Motel_activity"
+            android:label="Motels"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme"/>
+
+        <activity
+            android:name=".SevenEleven_activity"
+            android:label="7 Eleven"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme"/>
+
+        <activity
+            android:name=".Pharmacy_activity"
+            android:label="Pharmacy"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme"/>
+
 
         <meta-data
             android:name="com.google.android.gms.version"

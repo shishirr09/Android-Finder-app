@@ -42,4 +42,35 @@ public class GetURL {
                 "&v="+v+"&ll="+latitude+","+longitude+ "&query=\"Hospital\" &limit="+limit+"\"";
         return restaurant;
     }
+
+    public String getNightClubURL(){
+        String restaurant = API_URL+"client_id=" + ClIENT_ID + "&client_secret=" + ClIENT_SECRET +
+                "&v="+v+"&ll="+latitude+","+longitude+ "&query=\"Night Club\" &limit="+limit+"\"";
+        return restaurant;
+    }
+
+    public String getStarbucksURL(){
+        String restaurant = API_URL+"client_id=" + ClIENT_ID + "&client_secret=" + ClIENT_SECRET +
+                "&v="+v+"&ll="+latitude+","+longitude+ "&query=\"Starbucks\" &limit="+limit+"\"";
+        return restaurant;
+    }
+
+    public String getMotelURL(){
+        String restaurant = API_URL+"client_id=" + ClIENT_ID + "&client_secret=" + ClIENT_SECRET +
+                "&v="+v+"&ll="+latitude+","+longitude+ "&query=\"Motel\" &limit="+limit+"\"";
+        return restaurant;
+    }
+
+    public String getSevenElevenURL(){
+        String restaurant = API_URL+"client_id=" + ClIENT_ID + "&client_secret=" + ClIENT_SECRET +
+                "&v="+v+"&ll="+latitude+","+longitude+ "&query=\"7Eleven\" &limit="+limit+"\"";
+        return restaurant;
+    }
+
+    public String getPharmacy(){
+        String restaurant = API_URL+"client_id=" + ClIENT_ID + "&client_secret=" + ClIENT_SECRET +
+                "&v="+v+"&ll="+latitude+","+longitude+ "&query=\"Pharmacy\" &limit="+limit+"\"";
+        return restaurant;
+    }
+
 }
