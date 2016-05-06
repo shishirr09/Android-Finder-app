@@ -23,7 +23,7 @@ import java.util.concurrent.ExecutionException;
  */
 public class NightClub_activity extends AppCompatActivity {
     ListView list;
-    List<String> names, addresses, distance,contacts;
+    ArrayList<String> names, addresses, distance,contacts;
     ArrayList<Bitmap> images;
     Location currentLocation;
     DatabaseHelper helper;
@@ -35,18 +35,12 @@ public class NightClub_activity extends AppCompatActivity {
         setContentView(R.layout.view_layout);
 
         Intent intent = getIntent();
-
-        final double latitude = intent.getExtras().getDouble("latitude");
-        final double longitude = intent.getExtras().getDouble("longitude");
+        final ActivityHelper activityHelper = new ActivityHelper(intent);
         helper = DatabaseHelper.getInstance(getApplicationContext());
+        currentLocation = activityHelper.getCurrentLocation(activityHelper.getLatitude(), activityHelper.getLongitude());
 
-        currentLocation = new Location("");
-        currentLocation.setLatitude(latitude);
-        currentLocation.setLongitude(longitude);
-
-
-        createData(latitude, longitude);
-        calData();
+        data = activityHelper.getData(new GetURL(activityHelper.getLatitude(), activityHelper.getLongitude()).getNightClubURL());
+        assignData();
 
         Custom_adapter adapter = new Custom_adapter(this ,names, addresses, distance,contacts,images);
 
@@ -56,24 +50,20 @@ public class NightClub_activity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                Conversion obj = new Conversion(getApplicationContext());
-                Location loc = obj.getLocationFromAddress(addresses.get(position));
-                double destLat = loc.getLatitude();
-                double destLong = loc.getLongitude();
+                Location destLoc = activityHelper.getDestinationLocation(addresses, position, getApplicationContext());
 
-                ContentValues values = new ContentValues();
-                values.put(DatabaseHelper.NAME_COLUMN, names.get(position));
-                values.put(DatabaseHelper.Address_Column, addresses.get(position));
-                values.put(DatabaseHelper.Type_column, "Night Club");
+                String type = "Night Club";
+                activityHelper.insertData(names, addresses, type, position, helper);
 
-                SQLiteDatabase db = helper.getWritableDatabase();
-                db.insert(DatabaseHelper.Table_Name, null, values);
-
-                Uri gmmIntentUri = Uri.parse("http://maps.google.com/maps?saddr=" + latitude + "," + longitude + "&daddr=" + destLat + "," + destLong + "\"");
+                Uri gmmIntentUri = Uri.parse("http://maps.google.com/maps?saddr=" + activityHelper.getLatitude() + "," + activityHelper.getLongitude() + "&daddr=" + destLoc.getLatitude() + "," + destLoc.getLongitude() + "\"");
 
                 Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
-                if (mapIntent.resolveActivity(getPackageManager()) != null) {
+                if (mapIntent.resolveActivity(getPackageManager()) != null && destLoc.getLatitude() != 0.0) {
                     startActivity(mapIntent);
+                }
+                else{
+                    DailogBox obj = new DailogBox();
+                    obj.show(getFragmentManager(), "question");
                 }
             }
         });
@@ -81,7 +71,11 @@ public class NightClub_activity extends AppCompatActivity {
         list.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                return false;
+
+                Intent callIntent = new Intent(Intent.ACTION_DIAL);
+                callIntent.setData(Uri.parse("tel:"+contacts.get(position)));
+                startActivity(callIntent);
+                return true;
             }
         });
     }
@@ -104,22 +98,7 @@ public class NightClub_activity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-
-    public void createData(double lat, double lng) {
-
-        GetData obj = new GetData();
-        obj.execute(new GetURL(lat, lng).getNightClubURL());
-
-        try {
-            data = obj.get();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void calData(){
+    public void assignData(){
         names = data.getNames();
         contacts = data.getContacts();
         images = data.getImages();

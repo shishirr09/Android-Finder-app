@@ -36,8 +36,8 @@ public class Restaurant_activity extends AppCompatActivity {
         currentLocation = activityHelper.getCurrentLocation(activityHelper.getLatitude(),activityHelper.getLongitude());
 
 
-        createData(activityHelper.getLatitude(), activityHelper.getLongitude());
-        calData();
+        data = activityHelper.getData(new GetURL(activityHelper.getLatitude(), activityHelper.getLongitude()).getRestaurantURL());
+        assignData();
 
         Custom_adapter adapter = new Custom_adapter(this ,names, addresses, distance,contacts,images);
 
@@ -55,8 +55,12 @@ public class Restaurant_activity extends AppCompatActivity {
                 Uri gmmIntentUri = Uri.parse("http://maps.google.com/maps?saddr=" + activityHelper.getLatitude() + "," + activityHelper.getLongitude() + "&daddr=" + destLoc.getLatitude() + "," + destLoc.getLongitude() + "\"");
 
                 Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
-                if (mapIntent.resolveActivity(getPackageManager()) != null) {
+                if (mapIntent.resolveActivity(getPackageManager()) != null && destLoc.getLatitude() != 0.0) {
                     startActivity(mapIntent);
+                }
+                else{
+                    DailogBox obj = new DailogBox();
+                    obj.show(getFragmentManager(), "question");
                 }
             }
         });
@@ -91,22 +95,7 @@ public class Restaurant_activity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-
-    private void createData(double lat, double lng) {
-
-        GetData obj = new GetData();
-        obj.execute(new GetURL(lat, lng).getRestaurantURL());
-
-        try {
-            data = obj.get();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void calData(){
+    private void assignData(){
         names = data.getNames();
         contacts = data.getContacts();
         images = data.getImages();

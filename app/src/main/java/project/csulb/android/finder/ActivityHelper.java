@@ -4,9 +4,12 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
 import android.location.Location;
 
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
 
 /**
  * Created by Shishir on 5/2/2016.
@@ -46,6 +49,25 @@ public class ActivityHelper {
 
         SQLiteDatabase db = helper.getWritableDatabase();
         db.insert(DatabaseHelper.Table_Name, null, values);
+    }
+
+    public Data getData(String url){
+        GetData obj = new GetData();
+        Data data = new Data();
+        obj.execute(url);
+
+        try {
+            data = obj.get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        return data;
+    }
+
+    public void assignData(ArrayList<String> names, ArrayList<String> addresses,ArrayList<String> distance,ArrayList<String> contacts,ArrayList<Bitmap> images,Data data) {
+
     }
 
 }
