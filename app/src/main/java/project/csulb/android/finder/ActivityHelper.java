@@ -4,10 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Bitmap;
 import android.location.Location;
-
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
@@ -66,8 +63,5 @@ public class ActivityHelper {
         return data;
     }
 
-    public void assignData(ArrayList<String> names, ArrayList<String> addresses,ArrayList<String> distance,ArrayList<String> contacts,ArrayList<Bitmap> images,Data data) {
-
-    }
 
 }

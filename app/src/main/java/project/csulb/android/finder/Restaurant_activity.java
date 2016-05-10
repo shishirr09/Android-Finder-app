@@ -33,10 +33,11 @@ public class Restaurant_activity extends AppCompatActivity {
         Intent intent = getIntent();
         final ActivityHelper activityHelper = new ActivityHelper(intent);
         helper = DatabaseHelper.getInstance(getApplicationContext());
-        currentLocation = activityHelper.getCurrentLocation(activityHelper.getLatitude(),activityHelper.getLongitude());
+        currentLocation = activityHelper.getCurrentLocation(activityHelper.getLatitude(), activityHelper.getLongitude());
 
 
-        data = activityHelper.getData(new GetURL(activityHelper.getLatitude(), activityHelper.getLongitude()).getRestaurantURL());
+        //data = activityHelper.getData(new GetURL(activityHelper.getLatitude(), activityHelper.getLongitude()).getRestaurantURL());
+        getData(activityHelper);
         assignData();
 
         Custom_adapter adapter = new Custom_adapter(this ,names, addresses, distance,contacts,images);
@@ -95,6 +96,18 @@ public class Restaurant_activity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    private void getData(ActivityHelper activityHelper){
+        GetDataFromGoogle obj = new GetDataFromGoogle();
+        obj.execute(new GetURLFromGoogle(activityHelper.getLatitude(), activityHelper.getLongitude()).getRestaurantURL());
+
+        try {
+            data = obj.get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+    }
     private void assignData(){
         names = data.getNames();
         contacts = data.getContacts();
